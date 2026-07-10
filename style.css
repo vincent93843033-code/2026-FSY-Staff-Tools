@@ -2563,3 +2563,21 @@ body.tools-app .header h1 {
 body.tools-app .content {
   padding-top: 16px;
 }
+
+
+.meal-serving-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.meal-serving-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: rgba(47, 111, 79, 0.1);
+  color: var(--color-text);
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
