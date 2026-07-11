@@ -1,6 +1,6 @@
 {
-  "name": "工作人員小工具",
-  "short_name": "工作人員工具",
+  "name": "2026 FSY 工作人員小工具",
+  "short_name": "FSY 工作人員工具",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
