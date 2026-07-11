@@ -120,14 +120,6 @@
       { icon: '📽️', label: '碎片收集遊戲隊輔訓練.pptx', url: 'https://docs.google.com/presentation/d/1rIiHWEnG4maKRG8Y7fC18PW1dGhL6ZUp/edit?usp=sharing&ouid=117250599308326951494&rtpof=true&sd=true' },
     ] },
   ];
-  // 第五中隊「男女青年活動」證據分配（隊內資料，不在共用試算表內）
-  var YM_EVIDENCE = [
-    '亞聖・宜昕 → 證據 1、8',
-    '屸承・家均 → 證據 5、6',
-    '唯哲・曜瑄 → 證據 2、5',
-    '亞各・昉靚 → 證據 3、8',
-    '敏恩・羽庭 → 證據 3、7',
-  ];
   // 歌詞：每首歌的 sections 陣列＝段落，待提供歌詞時逐段填入即可
   var LYRICS = [
     { title: '與我同行', sections: [
@@ -1037,10 +1029,6 @@
     return /餐|膳食|宵夜/.test(act || '');
   }
 
-  function isYmActivity(act) {
-    return /(男青年|女青年)/.test(act || '');
-  }
-
   function resolveLink(text) {
     var m = (text || '').match(/https?:\/\/\S+/);
     if (m) return m[0];
@@ -1064,18 +1052,6 @@
     span.className = 'detail-value';
     span.textContent = text;
     return span;
-  }
-
-  function buildEvidenceList(items) {
-    var box = document.createElement('div');
-    box.className = 'detail-value evidence-list';
-    items.forEach(function (line) {
-      var d = document.createElement('div');
-      d.className = 'evidence-line';
-      d.textContent = line;
-      box.appendChild(d);
-    });
-    return box;
   }
 
   // iOS 主畫面（standalone）模式下 target=_blank 會失效，改用程式開啟並保底導向
@@ -1180,10 +1156,6 @@
 
     if (row.leaderGuide) fields.push(['\u5c0f\u968a\u8f14\u63d0\u9192', buildTextValue(row.leaderGuide)]);
     if (row.acGuide) fields.push(['\u52a9\u7406\u5354\u8abf\u54e1\u63d0\u9192', buildTextValue(row.acGuide)]);
-
-    if (isYmActivity(row.activity)) {
-      fields.push(['\u4e3b\u984c\u66f2\u898b\u8b49\u63d0\u9192', buildEvidenceList(YM_EVIDENCE), true]);
-    }
 
     if (noteKey) fields.push(['\u500b\u4eba\u7b46\u8a18', buildScheduleNoteEditor(noteKey, onResize), true]);
     if (fields.length === 0) return null;
