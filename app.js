@@ -2795,6 +2795,13 @@
     return /\u5f8c\u534a/.test(String(value || ''));
   }
 
+  function stripMealHalfLabel(value) {
+    return String(value || '')
+      .replace(/\u524d\u534a\s*[:\uff1a]\s*/g, '')
+      .replace(/\u524d\u534a[・\s]*/g, '')
+      .trim();
+  }
+
   function shiftMealReadyTime(value, deltaMinutes) {
     return String(value || '').replace(/(\d{1,2}):(\d{2})/g, function (match, hourText, minuteText) {
       var total = Number(hourText) * 60 + Number(minuteText) + deltaMinutes;
@@ -2817,6 +2824,8 @@
             .map(function (route) {
               var routeCopy = Object.assign({}, route);
               routeCopy.ready = shiftMealReadyTime(routeCopy.ready, -5);
+              if (routeCopy.staff) routeCopy.staff = stripMealHalfLabel(routeCopy.staff);
+              if (routeCopy.support) routeCopy.support = stripMealHalfLabel(routeCopy.support);
               return routeCopy;
             });
         }
@@ -2911,7 +2920,7 @@
     rows.forEach(function (hit) {
       var chip = document.createElement('span');
       chip.className = 'meal-serving-chip';
-      chip.textContent = hit.squad + '\u5c0f\u968a\uff1a' + (hit.advisor || '\u672a\u586b\u59d3\u540d') + '\uff08\u8def\u7dda' + hit.route + (hit.half ? ' ' + hit.half : '') + '\uff09';
+      chip.textContent = hit.squad + '\u5c0f\u968a\uff1a' + (hit.advisor || '\u672a\u586b\u59d3\u540d') + '\uff08\u8def\u7dda' + hit.route + '\uff09';
       chips.appendChild(chip);
     });
     block.appendChild(chips);
@@ -2964,7 +2973,7 @@
       var line = document.createElement('div');
       line.className = 'meal-route-line';
       var squadText = routePersonText(date, meal, route);
-      line.textContent = (route.ready ? route.ready + ' \u00b7 ' : '') + (route.half ? route.half + '\uff1a' : '') + squadText;
+      line.textContent = (route.ready ? route.ready + ' \u00b7 ' : '') + squadText;
       card.appendChild(line);
       if (route.support) {
         var support = document.createElement('div');
@@ -3061,7 +3070,7 @@
           person: item.advisor,
           route: item.route,
           half: item.half,
-          detail: squad + '\u5c0f\u968a \u00b7 \u8def\u7dda' + item.route + (item.half ? ' ' + item.half : '')
+          detail: squad + '\u5c0f\u968a \u00b7 \u8def\u7dda' + item.route
         });
       });
     });
@@ -3092,14 +3101,14 @@
             person: route.support,
             route: route.route,
             half: route.half || '',
-            detail: '\u8def\u7dda' + route.route + (route.half ? ' ' + route.half : '')
+            detail: '\u8def\u7dda' + route.route
           }));
           if (route.staff) pushMealServingSearchRow(rows, q, Object.assign({}, base, {
             role: '\u8def\u7dda\u4eba\u54e1',
             person: route.staff,
             route: route.route,
             half: route.half || '',
-            detail: '\u8def\u7dda' + route.route + (route.half ? ' ' + route.half : '')
+            detail: '\u8def\u7dda' + route.route
           }));
         });
         if (meal.prep) pushMealServingSearchRow(rows, q, Object.assign({}, base, {
@@ -3221,7 +3230,7 @@
       var detailParts = [row.role, row.person || row.advisor];
       if (row.detail) detailParts.push(row.detail);
       else if (row.squad) detailParts.push(row.squad + '\u5c0f\u968a');
-      if (row.route && !row.detail) detailParts.push('\u8def\u7dda' + row.route + (row.half ? ' ' + row.half : ''));
+      if (row.route && !row.detail) detailParts.push('\u8def\u7dda' + row.route);
       if (row.tier) detailParts.push(row.tier + '\u68af\u6b21');
       sub.textContent = detailParts.filter(Boolean).join(' - ');
       card.appendChild(sub);
